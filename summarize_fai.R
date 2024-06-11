@@ -46,20 +46,26 @@ ggsave(paste(fai_file, ".genome_length_histogram.pdf", sep = ""), width=8, heigh
 # Sort the data by genome_length in decreasing order
 result <- result[order(result$genome_length, decreasing = TRUE), ]
 
+# Calculate the maximum width of the labels
+#max_label_width <- max(nchar(result$genome)) * 0.02
+#print(max_label_width)
+
+#  geom_text(aes( label = genome), size = 2, hjust = -0.2, vjust = 0.5) +
+
 # Create the plot
 plot <- ggplot(result, aes(x = genome_length, y = reorder(genome, genome_length))) +
   geom_point(size = 1.5) +
   geom_segment(aes(x = 0, xend = genome_length, yend = genome), linetype = "solid", color = "black", size = 0.2) +
-  geom_text(aes(label = paste0(round(genome_length / 1e6, 2), " Mb")), size = 2, hjust = -0.1, vjust = 0.5) +
+  geom_text(aes(label = paste0(round(genome_length / 1e6, 2), " Mb   ", genome)), size = 2, hjust = -0.1, vjust = 0.5) +
   labs(x = "Genome Length", y = "Assembly", title = "Genome Length Distribution") +
   theme_minimal() +
   theme(
     panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(),
-    axis.text.y = element_text(hjust = 1, size = rel(0.7)),
+    axis.text.y = element_blank(),
     axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)
   ) +
-  scale_x_continuous(breaks = seq(0, max(result$genome_length), by = 1e9), labels = function(x) paste0(x / 1e9, " Gb"))
+  scale_x_continuous(breaks = seq(0, max(result$genome_length), by = 500e6), labels = function(x) paste0(x / 1e9, " Gb"), expand = c(0, 0.05))
 
 # Save the plot
 ggsave(paste(fai_file, ".genome_length_species.pdf", sep = ""), plot = plot, width = 20, height = 40)
