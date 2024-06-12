@@ -65,7 +65,7 @@ plot <- ggplot(result, aes(x = genome_length, y = reorder(genome, genome_length)
     axis.text.y = element_blank(),
     axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)
   ) +
-  scale_x_continuous(breaks = seq(0, max(result$genome_length), by = 500e6), labels = function(x) paste0(x / 1e9, " Gb"), expand = c(0, 0.05))
+  scale_x_continuous(breaks = seq(0, max(result$genome_length), by = 500e6), labels = function(x) paste0(x / 1e9, " Gb"), expand = c(0, 0.05), limits = c(0, max(result$genome_length) + 2e9))
 
 # Save the plot
 ggsave(paste(fai_file, ".genome_length_species.pdf", sep = ""), plot = plot, width = 20, height = 40)
